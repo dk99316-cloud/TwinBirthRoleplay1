@@ -1,0 +1,59 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {};
+	objectVersion = 56;
+	objects = {
+/* Begin PBXBuildFile section */
+		A10000000000000000000001 /* TwinBirthRoleplayApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = B10000000000000000000001 /* TwinBirthRoleplayApp.swift */; };
+		A10000000000000000000002 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B10000000000000000000002 /* ContentView.swift */; };
+		A10000000000000000000003 /* ChatStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = B10000000000000000000003 /* ChatStore.swift */; };
+		A10000000000000000000004 /* ChatMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = B10000000000000000000004 /* ChatMessage.swift */; };
+		A10000000000000000000005 /* RoleplayPrompt.swift in Sources */ = {isa = PBXBuildFile; fileRef = B10000000000000000000005 /* RoleplayPrompt.swift */; };
+		A10000000000000000000006 /* roleplay_rules.txt in Resources */ = {isa = PBXBuildFile; fileRef = B10000000000000000000006 /* roleplay_rules.txt */; };
+		A10000000000000000000007 /* birth_opening.txt in Resources */ = {isa = PBXBuildFile; fileRef = B10000000000000000000007 /* birth_opening.txt */; };
+/* End PBXBuildFile section */
+/* Begin PBXFileReference section */
+		B10000000000000000000001 /* TwinBirthRoleplayApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TwinBirthRoleplayApp.swift; sourceTree = "<group>"; };
+		B10000000000000000000002 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		B10000000000000000000003 /* ChatStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatStore.swift; sourceTree = "<group>"; };
+		B10000000000000000000004 /* ChatMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatMessage.swift; sourceTree = "<group>"; };
+		B10000000000000000000005 /* RoleplayPrompt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoleplayPrompt.swift; sourceTree = "<group>"; };
+		B10000000000000000000006 /* roleplay_rules.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = roleplay_rules.txt; sourceTree = "<group>"; };
+		B10000000000000000000007 /* birth_opening.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = birth_opening.txt; sourceTree = "<group>"; };
+		B10000000000000000000008 /* TwinBirthRoleplay.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TwinBirthRoleplay.app; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+/* Begin PBXFrameworksBuildPhase section */
+		C10000000000000000000001 /* Frameworks */ = {isa = PBXFrameworksBuildPhase; buildActionMask = 2147483647; files = (); runOnlyForDeploymentPostprocessing = 0; };
+/* End PBXFrameworksBuildPhase section */
+/* Begin PBXGroup section */
+		D10000000000000000000001 = {isa = PBXGroup; children = (D10000000000000000000002 /* TwinBirthRoleplay */, D10000000000000000000003 /* Products */,); sourceTree = "<group>"; };
+		D10000000000000000000002 /* TwinBirthRoleplay */ = {isa = PBXGroup; path = TwinBirthRoleplay; sourceTree = "<group>"; children = (B10000000000000000000001, B10000000000000000000002, B10000000000000000000003, B10000000000000000000004, B10000000000000000000005, B10000000000000000000006, B10000000000000000000007,); };
+		D10000000000000000000003 /* Products */ = {isa = PBXGroup; name = Products; sourceTree = "<group>"; children = (B10000000000000000000008 /* TwinBirthRoleplay.app */,); };
+/* End PBXGroup section */
+/* Begin PBXNativeTarget section */
+		E10000000000000000000001 /* TwinBirthRoleplay */ = {isa = PBXNativeTarget; buildConfigurationList = F10000000000000000000002 /* Build configuration list for PBXNativeTarget */; buildPhases = (C10000000000000000000001 /* Frameworks */, A20000000000000000000001 /* Sources */, A20000000000000000000002 /* Resources */,); buildRules = (); dependencies = (); name = TwinBirthRoleplay; productName = TwinBirthRoleplay; productReference = B10000000000000000000008 /* TwinBirthRoleplay.app */; productType = "com.apple.product-type.application"; };
+/* End PBXNativeTarget section */
+/* Begin PBXProject section */
+		E10000000000000000000002 /* Project object */ = {isa = PBXProject; attributes = {BuildIndependentTargetsInParallel = 1; LastUpgradeCheck = 2600; }; buildConfigurationList = F10000000000000000000001 /* Build configuration list for PBXProject */; compatibilityVersion = "Xcode 14.0"; developmentRegion = ko; hasScannedForEncodings = 0; knownRegions = (ko, en, Base,); mainGroup = D10000000000000000000001; productRefGroup = D10000000000000000000003 /* Products */; projectDirPath = ""; projectRoot = ""; targets = (E10000000000000000000001 /* TwinBirthRoleplay */,); };
+/* End PBXProject section */
+/* Begin PBXResourcesBuildPhase section */
+		A20000000000000000000002 /* Resources */ = {isa = PBXResourcesBuildPhase; buildActionMask = 2147483647; files = (A10000000000000000000006, A10000000000000000000007,); runOnlyForDeploymentPostprocessing = 0; };
+/* End PBXResourcesBuildPhase section */
+/* Begin PBXSourcesBuildPhase section */
+		A20000000000000000000001 /* Sources */ = {isa = PBXSourcesBuildPhase; buildActionMask = 2147483647; files = (A10000000000000000000001, A10000000000000000000002, A10000000000000000000003, A10000000000000000000004, A10000000000000000000005,); runOnlyForDeploymentPostprocessing = 0; };
+/* End PBXSourcesBuildPhase section */
+/* Begin XCBuildConfiguration section */
+		F20000000000000000000001 /* Debug project */ = {isa = XCBuildConfiguration; buildSettings = {ALWAYS_SEARCH_USER_PATHS = NO; CLANG_ENABLE_MODULES = YES; IPHONEOS_DEPLOYMENT_TARGET = 26.0; SDKROOT = iphoneos; SWIFT_VERSION = 5.0; }; name = Debug; };
+		F20000000000000000000002 /* Release project */ = {isa = XCBuildConfiguration; buildSettings = {ALWAYS_SEARCH_USER_PATHS = NO; CLANG_ENABLE_MODULES = YES; IPHONEOS_DEPLOYMENT_TARGET = 26.0; SDKROOT = iphoneos; SWIFT_VERSION = 5.0; }; name = Release; };
+		F20000000000000000000003 /* Debug target */ = {isa = XCBuildConfiguration; buildSettings = {CODE_SIGN_STYLE = Automatic; GENERATE_INFOPLIST_FILE = YES; INFOPLIST_KEY_CFBundleDisplayName = "쌍둥이의 첫 번째 삶"; INFOPLIST_KEY_UILaunchScreen_Generation = YES; IPHONEOS_DEPLOYMENT_TARGET = 26.0; PRODUCT_BUNDLE_IDENTIFIER = com.example.TwinBirthRoleplay; PRODUCT_NAME = "$(TARGET_NAME)"; SUPPORTED_PLATFORMS = "iphoneos iphonesimulator"; SWIFT_EMIT_LOC_STRINGS = YES; SWIFT_VERSION = 5.0; TARGETED_DEVICE_FAMILY = "1,2"; }; name = Debug; };
+		F20000000000000000000004 /* Release target */ = {isa = XCBuildConfiguration; buildSettings = {CODE_SIGN_STYLE = Automatic; GENERATE_INFOPLIST_FILE = YES; INFOPLIST_KEY_CFBundleDisplayName = "쌍둥이의 첫 번째 삶"; INFOPLIST_KEY_UILaunchScreen_Generation = YES; IPHONEOS_DEPLOYMENT_TARGET = 26.0; PRODUCT_BUNDLE_IDENTIFIER = com.example.TwinBirthRoleplay; PRODUCT_NAME = "$(TARGET_NAME)"; SUPPORTED_PLATFORMS = "iphoneos iphonesimulator"; SWIFT_EMIT_LOC_STRINGS = YES; SWIFT_VERSION = 5.0; TARGETED_DEVICE_FAMILY = "1,2"; }; name = Release; };
+/* End XCBuildConfiguration section */
+/* Begin XCConfigurationList section */
+		F10000000000000000000001 /* Build configuration list for PBXProject */ = {isa = XCConfigurationList; buildConfigurations = (F20000000000000000000001, F20000000000000000000002,); defaultConfigurationIsVisible = 0; defaultConfigurationName = Release; };
+		F10000000000000000000002 /* Build configuration list for PBXNativeTarget */ = {isa = XCConfigurationList; buildConfigurations = (F20000000000000000000003, F20000000000000000000004,); defaultConfigurationIsVisible = 0; defaultConfigurationName = Release; };
+/* End XCConfigurationList section */
+	};
+	rootObject = E10000000000000000000002 /* Project object */;
+}
+
