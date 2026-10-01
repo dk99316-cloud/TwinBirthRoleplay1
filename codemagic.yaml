@@ -14,10 +14,11 @@ workflows:
                      -sdk iphoneos \
                      -allowProvisioningUpdates \
                      CODE_SIGNING_ALLOWED=NO
-          mkdir -p build/ios/ipa
+          
+          # 3uTools 인식용 표준 IPA 구조 생성 (매우 중요)
+          mkdir -p build/ios/ipa/Payload
+          cp -r /Users/builder/Library/Developer/Xcode/DerivedData/*/Build/Products/Release-iphoneos/TwinBirthRoleplay.app build/ios/ipa/Payload/
           cd build/ios/ipa
-          mkdir -p Payload
-          cp -r /Users/builder/Library/Developer/Xcode/DerivedData/*/Build/Products/Release-iphoneos/TwinBirthRoleplay.app Payload/
           zip -r TwinBirthRoleplay.ipa Payload
     artifacts:
       - build/ios/ipa/*.ipa
