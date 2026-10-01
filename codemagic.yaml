@@ -8,6 +8,10 @@ workflows:
     scripts:
       - name: Build unsigned iPhone app
         script: |
+          # 1. 진짜 프로젝트 폴더 안으로 이동 (핵심 수정)
+          cd TwinBirthRoleplay
+          
+          # 2. 빌드 시작
           xcodebuild -project TwinBirthRoleplay.xcodeproj \
                      -scheme TwinBirthRoleplay \
                      -configuration Release \
@@ -15,7 +19,7 @@ workflows:
                      -allowProvisioningUpdates \
                      CODE_SIGNING_ALLOWED=NO
           
-          # Info.plist와 필수 설정을 모두 포함하는 정석 압축 방식
+          # 3. Info.plist를 포함하는 표준 압축 진행
           mkdir -p build/ios/ipa/Payload
           BUILT_APP_DIR=$(ls -d /Users/builder/Library/Developer/Xcode/DerivedData/*/Build/Products/Release-iphoneos/TwinBirthRoleplay.app 2>/dev/null | head -n 1)
           
@@ -28,4 +32,4 @@ workflows:
             exit 1
           fi
     artifacts:
-      - build/ios/ipa/*.ipa
+      - TwinBirthRoleplay/build/ios/ipa/*.ipa
