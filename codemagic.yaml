@@ -8,9 +8,20 @@ workflows:
     scripts:
       - name: Build unsigned iPhone app
         script: |
+          # 1. 파일이 숨겨진 폴더 위치 자동 추적 후 이동 (핵심)
+          PROJ_DIR=$(find . -name "TwinBirthRoleplay.xcodeproj" -type d | head -n 1 | xargs dirname)
+          if [ -d "$PROJ_DIR" ]; then
+            cd "$PROJ_DIR"
+            echo "Moved to project directory: $(pwd)"
+          else
+            echo "Error: TwinBirthRoleplay.xcodeproj not found anywhere in repository!"
+            exit 1
+          fi
+          
+          # 2. 빌드 시작
           xcodebuild -project TwinBirthRoleplay.xcodeproj -scheme TwinBirthRoleplay -configuration Release -sdk iphoneos -allowProvisioningUpdates CODE_SIGNING_ALLOWED=NO
           
-          # 내용물 검사 및 강제 압축 구문
+          # 3. 진짜 내용물 싹 긁어모아 표준 압축
           mkdir -p build/ios/ipa/Payload
           APP_PATH=$(find /Users/builder/Library/Developer/Xcode/DerivedData -name "TwinBirthRoleplay.app" -type d | head -n 1)
           
@@ -19,8 +30,8 @@ workflows:
             cd build/ios/ipa
             zip -r TwinBirthRoleplay.ipa Payload
           else
-            echo "Error: Actual TwinBirthRoleplay.app folder not found anywhere!"
+            echo "Error: Actual TwinBirthRoleplay.app folder not found!"
             exit 1
           fi
     artifacts:
-      - build/ios/ipa/*.ipa
+      - "**/build/ios/ipa/*.ipa"
