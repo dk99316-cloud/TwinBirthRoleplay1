@@ -1,46 +1,35 @@
 workflows:
   ios-development:
-    name: TwinBirthRoleplay iOS Hobby Build
+    name: Lucius Story - iOS IPA Build
     max_build_duration: 60
     instance_type: mac_mini_m2
     environment:
       xcode: latest
     scripts:
-      - name: Build unsigned iPhone app
+      - name: Build offline iPhone app and package IPA
         script: |
-          # 1. 꼬여 있는 수동 파일 구조를 Xcode가 인식할 수 있는 정석 구조로 강제 재배치
-          mkdir -p TwinBirthRoleplay
-          mv ChatMessage.swift TwinBirthRoleplay/ 2>/dev/null || true
-          mv ChatStore.swift TwinBirthRoleplay/ 2>/dev/null || true
-          mv ContentView.swift TwinBirthRoleplay/ 2>/dev/null || true
-          mv RoleplayPrompt.swift TwinBirthRoleplay/ 2>/dev/null || true
-          mv TwinBirthRoleplayApp.swift TwinBirthRoleplay/ 2>/dev/null || true
-          mv birth_opening.txt TwinBirthRoleplay/ 2>/dev/null || true
-          mv roleplay_rules.txt TwinBirthRoleplay/ 2>/dev/null || true
-          
-          # 2. xcodeproj 폴더 방 강제 생성 및 세팅 파일 주입
-          mkdir -p TwinBirthRoleplay.xcodeproj
-          mv project.pbxproj TwinBirthRoleplay.xcodeproj/ 2>/dev/null || true
-          
-          # 3. 진짜 올바른 위치에서 완벽한 빌드 실행
-          xcodebuild -project TwinBirthRoleplay.xcodeproj \
-                     -scheme TwinBirthRoleplay \
-                     -configuration Release \
-                     -sdk iphoneos \
-                     -allowProvisioningUpdates \
-                     CODE_SIGNING_ALLOWED=NO
-          
-          # 4. 생성된 내용물을 싹 긁어모아 3uTools/Diawi가 인식하는 표준 압축 진행
-          mkdir -p build/ios/ipa/Payload
-          APP_PATH=$(find /Users/builder/Library/Developer/Xcode/DerivedData -name "TwinBirthRoleplay.app" -type d | head -n 1)
-          
-          if [ -n "$APP_PATH" ] && [ -d "$APP_PATH" ]; then
-            cp -r "$APP_PATH" build/ios/ipa/Payload/
-            cd build/ios/ipa
-            zip -r TwinBirthRoleplay.ipa Payload
-          else
-            echo "Error: Actual TwinBirthRoleplay.app folder not found!"
+          set -euo pipefail
+          SRC_DIR="$CM_BUILD_DIR/lucius-source"
+          DERIVED="$CM_BUILD_DIR/derived-data"
+          mkdir -p "$SRC_DIR"
+          unzip -q "$CM_BUILD_DIR/LuciusStoryAppleAI_source.zip" -d "$SRC_DIR"
+          xcodebuild \
+            -project "$SRC_DIR/LuciusStoryAppleAI.xcodeproj" \
+            -scheme "LuciusStoryAppleAI" \
+            -configuration Release \
+            -destination 'generic/platform=iOS' \
+            -derivedDataPath "$DERIVED" \
+            CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGNING_REQUIRED=NO \
+            build
+          APP_PATH="$DERIVED/Build/Products/Release-iphoneos/LuciusStoryAppleAI.app"
+          if [ ! -d "$APP_PATH" ]; then
+            echo "Error: LuciusStoryAppleAI.app was not created"
             exit 1
           fi
+          mkdir -p "$CM_BUILD_DIR/Payload"
+          cp -R "$APP_PATH" "$CM_BUILD_DIR/Payload/"
+          cd "$CM_BUILD_DIR"
+          zip -qry "$CM_BUILD_DIR/LuciusStoryAppleAI.ipa" Payload
     artifacts:
-      - build/ios/ipa/*.ipa
+      - $CM_BUILD_DIR/LuciusStoryAppleAI.ipa

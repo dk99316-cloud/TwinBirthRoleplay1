@@ -1,22 +1,21 @@
-# 쌍둥이의 첫 번째 삶 — iPhone 역할극 앱
+# 루시우스의 이야기 — 오프라인 iPhone 역할극
 
-루데우스와 루시우스가 쌍둥이로 태어나는 장면부터 시작하는 SwiftUI 앱 프로젝트입니다. 이야기는 두 사람의 첫 번째 삶이며, 쌍둥이와 다른 인물 모두 전생/미래 기억이 없습니다. 대화와 설정 자료는 iPhone 안에 저장하며, 응답 생성은 Apple Foundation Models를 사용하도록 구성했습니다.
+새로 받은 SwiftUI 화면과 캐릭터 이미지, 기존 TwinBirthRoleplay 저장소의 ChatStore에서 사용한 문맥 제한·반복 문단 정리 방식을 합친 iOS 프로젝트입니다.
 
-## 요구 사항
+## 기능
+- Apple Foundation Models 기기 내 생성
+- 인터넷 검색 코드 없음: 설정 검색은 앱 번들 안에 든 텍스트 파일만 읽음
+- 루데우스와 루시우스의 첫 삶, 쌍둥이 탄생 직후 자동 시작
+- 둘은 전생이나 이전 삶의 기억이 없으며 신생아로 행동
+- 사용자가 루시우스만 연기, AI는 다른 인물과 세계 반응을 작성
+- 캐릭터 이미지, 최근 대화, 장기 기억 저장
+- 같은 문단 반복 제거 및 문맥 길이 제한
+- 처음부터 다시 시작 메뉴
 
-- macOS에서 Xcode 26 이상으로 빌드해야 합니다.
-- iPhone은 iOS 26 이상 및 Apple Intelligence 지원이 필요하고, 기기 내 모델이 준비되어 있어야 합니다.
-- 대화 생성 코드는 네트워크 API를 호출하지 않습니다. 기기 내 모델이 지원되지 않거나 준비되지 않은 경우에는 앱에서 안내합니다.
-- 한국어 생성 품질과 완전한 비행기 모드 동작은 실제 대상 iPhone에서 확인해야 합니다.
+## 빌드
+Codemagic 저장소 루트에 `LuciusStoryAppleAI_source.zip`과 `codemagic.yaml`을 둡니다. `Lucius Story - iOS IPA Build` 워크플로가 unsigned `LuciusStoryAppleAI.ipa`를 만듭니다. Sideloadly 설치 시 개인 Apple ID 서명이 필요할 수 있습니다.
 
-## iPhone에 설치하는 방법
+## 기기 요구 사항
+Xcode 26 이상으로 빌드하며, Apple Foundation Models를 쓸 수 있는 iOS 기기와 다운로드된 온디바이스 모델이 필요합니다. iPhone 15 Pro Max에서 한국어 생성과 오프라인 동작은 실제 기기에서 확인해야 합니다.
 
-1. Mac에서 `TwinBirthRoleplay.xcodeproj`를 Xcode로 엽니다.
-2. Signing & Capabilities에서 본인의 Apple 계정을 선택하고, 고유한 Bundle Identifier를 설정합니다.
-3. iPhone을 Mac에 연결해 실행 대상으로 선택한 뒤 Run을 누릅니다.
-
-이 프로젝트를 Windows에서 직접 IPA로 빌드하거나 서명할 수는 없습니다. iPhone에 직접 설치하려면 Xcode를 실행할 Mac이 필요합니다.
-
-## 이야기 시작점
-
-첫 장면은 쌍둥이의 탄생 직후입니다. 루데우스와 루시우스, 실피 모두 전생이나 미래의 기억 없이 첫 번째 삶을 살아갑니다. 앱은 루시우스의 행동과 생각을 대신 만들지 않도록 규칙을 포함합니다. 과거 아카이브의 2회차 설정이나 성인기 숲길 장면은 시작 프롬프트에 넣지 않았습니다.
+앱은 대화 생성 과정에서 URLSession, 웹 검색, 외부 AI 서버를 사용하지 않습니다. 빌드 과정은 Codemagic 인터넷 연결을 사용합니다.
