@@ -1,21 +1,21 @@
-# 루시우스의 이야기 — 오프라인 iPhone 역할극
+# 쌍둥이의 첫 삶 — 새 프로젝트
 
-새로 받은 SwiftUI 화면과 캐릭터 이미지, 기존 TwinBirthRoleplay 저장소의 ChatStore에서 사용한 문맥 제한·반복 문단 정리 방식을 합친 iOS 프로젝트입니다.
+아이폰에서 Apple Intelligence 온디바이스 언어 모델로 진행하는 오프라인 우선 역할극 앱입니다.
 
-## 기능
-- Apple Foundation Models 기기 내 생성
-- 인터넷 검색 코드 없음: 설정 검색은 앱 번들 안에 든 텍스트 파일만 읽음
-- 루데우스와 루시우스의 첫 삶, 쌍둥이 탄생 직후 자동 시작
-- 둘은 전생이나 이전 삶의 기억이 없으며 신생아로 행동
-- 사용자가 루시우스만 연기, AI는 다른 인물과 세계 반응을 작성
-- 캐릭터 이미지, 최근 대화, 장기 기억 저장
-- 같은 문단 반복 제거 및 문맥 길이 제한
-- 처음부터 다시 시작 메뉴
+## 새 버전 설계
+- 루데우스와 루시우스의 첫 삶, 탄생 직후 장면에서 시작
+- 두 아이에게 전생이나 이전 삶의 기억을 부여하지 않음
+- 사용자가 루시우스의 행동과 대사를 맡고, AI는 다른 인물과 장면을 진행
+- Apple Foundation Models의 구조화된 응답으로 장면 서술과 인물 대사를 분리
+- 세로 화면과 좁은 폭에 맞춘 SwiftUI 레이아웃
+- 대화는 기기 안에 저장
+- 기본 답변은 기기 내 모델에서 생성하며, 인터넷 검색은 사용자가 검색 버튼을 눌렀을 때만 실행
+- 검색 버튼은 최근 사용자 입력에서 검색어를 만들고 Google 검색 페이지를 엽니다. 대화 전체를 전송하지 않습니다.
+
+## 요구 사항
+- iOS 26 이상 및 Apple Intelligence 지원 기기
+- Apple Intelligence 언어 모델 다운로드가 완료되어야 오프라인 답변 생성 가능
+- 네트워크 검색은 검색 버튼을 눌렀을 때 인터넷 연결을 사용
 
 ## 빌드
-Codemagic 저장소 루트에 `LuciusStoryAppleAI_source.zip`과 `codemagic.yaml`을 둡니다. `Lucius Story - iOS IPA Build` 워크플로가 unsigned `LuciusStoryAppleAI.ipa`를 만듭니다. Sideloadly 설치 시 개인 Apple ID 서명이 필요할 수 있습니다.
-
-## 기기 요구 사항
-Xcode 26 이상으로 빌드하며, Apple Foundation Models를 쓸 수 있는 iOS 기기와 다운로드된 온디바이스 모델이 필요합니다. iPhone 15 Pro Max에서 한국어 생성과 오프라인 동작은 실제 기기에서 확인해야 합니다.
-
-앱은 대화 생성 과정에서 URLSession, 웹 검색, 외부 AI 서버를 사용하지 않습니다. 빌드 과정은 Codemagic 인터넷 연결을 사용합니다.
+Codemagic에서 저장소 루트의 `codemagic.yaml` 워크플로를 실행합니다. 워크플로는 저장소에 있는 `LuciusStoryAppleAI.xcodeproj`를 직접 빌드하고 unsigned IPA를 생성합니다. 따라서 ZIP 안의 오래된 파일을 잘못 빌드하는 일을 막습니다. 기기에 설치하려면 Sideloadly 등으로 개인 Apple ID 서명을 해야 할 수 있습니다.

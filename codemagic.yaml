@@ -9,12 +9,10 @@ workflows:
       - name: Build offline iPhone app and package IPA
         script: |
           set -euo pipefail
-          SRC_DIR="$CM_BUILD_DIR/lucius-source"
           DERIVED="$CM_BUILD_DIR/derived-data"
-          mkdir -p "$SRC_DIR"
-          unzip -q "$CM_BUILD_DIR/LuciusStoryAppleAI_source.zip" -d "$SRC_DIR"
+          mkdir -p "$DERIVED"
           xcodebuild \
-            -project "$SRC_DIR/LuciusStoryAppleAI.xcodeproj" \
+            -project "$CM_BUILD_DIR/LuciusStoryAppleAI.xcodeproj" \
             -scheme "LuciusStoryAppleAI" \
             -configuration Release \
             -destination 'generic/platform=iOS' \
@@ -24,7 +22,7 @@ workflows:
             build
           APP_PATH="$DERIVED/Build/Products/Release-iphoneos/LuciusStoryAppleAI.app"
           if [ ! -d "$APP_PATH" ]; then
-            echo "Error: LuciusStoryAppleAI.app was not created"
+            echo "Error: app bundle was not created"
             exit 1
           fi
           mkdir -p "$CM_BUILD_DIR/Payload"

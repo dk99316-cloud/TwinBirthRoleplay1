@@ -1,7 +1,7 @@
 import SwiftUI
 
 @main
-struct TwinBirthRoleplayApp: App {
+struct LuciusStoryAppleAIApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
