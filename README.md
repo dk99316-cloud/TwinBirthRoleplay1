@@ -18,4 +18,4 @@
 - 네트워크 검색은 검색 버튼을 눌렀을 때 인터넷 연결을 사용
 
 ## 빌드
-Codemagic에서 저장소 루트의 `codemagic.yaml` 워크플로를 실행합니다. 워크플로는 저장소에 있는 `LuciusStoryAppleAI.xcodeproj`를 직접 빌드하고 unsigned IPA를 생성합니다. 따라서 ZIP 안의 오래된 파일을 잘못 빌드하는 일을 막습니다. 기기에 설치하려면 Sideloadly 등으로 개인 Apple ID 서명을 해야 할 수 있습니다.
+Codemagic 앱에 GitHub webhook이 연결되어 있으면 `main`에 push할 때 자동 빌드됩니다. 수동으로도 `ios-development` 워크플로를 실행할 수 있습니다. 워크플로는 저장소의 `LuciusStoryAppleAI.xcodeproj`를 직접 빌드하고 unsigned IPA를 생성합니다. 기기에 설치하려면 Sideloadly 등으로 개인 Apple ID 서명을 해야 할 수 있습니다.
