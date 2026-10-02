@@ -8,23 +8,9 @@ workflows:
     scripts:
       - name: Build unsigned iPhone app
         script: |
-          xcodebuild -project TwinBirthRoleplay.xcodeproj \
-                     -scheme TwinBirthRoleplay \
-                     -configuration Release \
-                     -sdk iphoneos \
-                     -allowProvisioningUpdates \
-                     CODE_SIGNING_ALLOWED=NO
-          
-          mkdir -p build/ios/ipa/Payload
-          BUILT_APP_DIR=$(ls -d /Users/builder/Library/Developer/Xcode/DerivedData/*/Build/Products/Release-iphoneos/TwinBirthRoleplay.app 2>/dev/null | head -n 1)
-          
-          if [ -d "$BUILT_APP_DIR" ]; then
-            cp -r "$BUILT_APP_DIR" build/ios/ipa/Payload/
-            cd build/ios/ipa
-            zip -r TwinBirthRoleplay.ipa Payload
-          else
-            echo "Error: Built app folder not found!"
-            exit 1
-          fi
+          xcodebuild -project TwinBirthRoleplay.xcodeproj -scheme TwinBirthRoleplay -configuration Release -sdk iphoneos -allowProvisioningUpdates CODE_SIGNING_ALLOWED=NO
+          mkdir -p Payload
+          cp -r /Users/builder/Library/Developer/Xcode/DerivedData/*/Build/Products/Release-iphoneos/TwinBirthRoleplay.app Payload/
+          zip -r TwinBirthRoleplay.ipa Payload
     artifacts:
-      - build/ios/ipa/*.ipa
+      - "*.ipa"
