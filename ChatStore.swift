@@ -66,23 +66,38 @@ final class ChatStore {
             let request: String
             if includeAsUserMessage {
                 request = """
-                지금까지의 대화:
+                최근 대화의 마지막 시점 바로 다음부터 이어 쓴다. 같은 장면을 다시 시작하지 않는다.
                 \(history)
 
-                이어서 다른 인물과 세계의 반응만 짧게 써 주세요.
-                루시우스의 다음 행동이나 대사, 생각은 대신 정하지 마세요.
+                이 대화 다음에 일어나는 새로운 반응이나 사건 하나만 짧게 써 주세요. 루시우스의 행동, 대사, 생각은 대신 정하지 마세요.
                 """
             } else {
-                request = "쌍둥이 탄생 직후의 장면을 짧게 시작해 주세요. 루시우스의 행동은 정하지 마세요."
+                request = "첫 장면을 시작해 주세요. 쌍둥이가 태어난 직후 가족의 반응을 짧게 묘사하고, 루시우스가 반응할 차례에 멈추세요."
             }
 
             let options = GenerationOptions(maximumResponseTokens: 350)
             let response = try await session.respond(to: request, options: options)
-            messages.append(ChatMessage(role: .assistant, text: response.content))
+            let cleanedResponse = removingRepeatedParagraphs(from: response.content)
+            messages.append(ChatMessage(role: .assistant, text: cleanedResponse))
             save()
         } catch {
             status = "응답을 만들지 못했어요. 잠시 뒤 다시 시도해 주세요. (\(error.localizedDescription))"
         }
+    }
+
+    private func removingRepeatedParagraphs(from text: String) -> String {
+        let normalizedText = text.replacingOccurrences(of: "\r\n", with: "\n")
+        let paragraphs = normalizedText
+            .components(separatedBy: "\n\n")
+            .map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
+            .filter { !$0.isEmpty }
+
+        var seen = Set<String>()
+        let uniqueParagraphs = paragraphs.filter { paragraph in
+            let key = String(paragraph.filter { !$0.isWhitespace }).lowercased()
+            return seen.insert(key).inserted
+        }
+        return uniqueParagraphs.joined(separator: "\n\n")
     }
 
     private func save() {
