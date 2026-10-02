@@ -8,20 +8,29 @@ workflows:
     scripts:
       - name: Build unsigned iPhone app
         script: |
-          # 1. 파일이 숨겨진 폴더 위치 자동 추적 후 이동 (핵심)
-          PROJ_DIR=$(find . -name "TwinBirthRoleplay.xcodeproj" -type d | head -n 1 | xargs dirname)
-          if [ -d "$PROJ_DIR" ]; then
-            cd "$PROJ_DIR"
-            echo "Moved to project directory: $(pwd)"
-          else
-            echo "Error: TwinBirthRoleplay.xcodeproj not found anywhere in repository!"
-            exit 1
-          fi
+          # 1. 꼬여 있는 수동 파일 구조를 Xcode가 인식할 수 있는 정석 구조로 강제 재배치
+          mkdir -p TwinBirthRoleplay
+          mv ChatMessage.swift TwinBirthRoleplay/ 2>/dev/null || true
+          mv ChatStore.swift TwinBirthRoleplay/ 2>/dev/null || true
+          mv ContentView.swift TwinBirthRoleplay/ 2>/dev/null || true
+          mv RoleplayPrompt.swift TwinBirthRoleplay/ 2>/dev/null || true
+          mv TwinBirthRoleplayApp.swift TwinBirthRoleplay/ 2>/dev/null || true
+          mv birth_opening.txt TwinBirthRoleplay/ 2>/dev/null || true
+          mv roleplay_rules.txt TwinBirthRoleplay/ 2>/dev/null || true
           
-          # 2. 빌드 시작
-          xcodebuild -project TwinBirthRoleplay.xcodeproj -scheme TwinBirthRoleplay -configuration Release -sdk iphoneos -allowProvisioningUpdates CODE_SIGNING_ALLOWED=NO
+          # 2. xcodeproj 폴더 방 강제 생성 및 세팅 파일 주입
+          mkdir -p TwinBirthRoleplay.xcodeproj
+          mv project.pbxproj TwinBirthRoleplay.xcodeproj/ 2>/dev/null || true
           
-          # 3. 진짜 내용물 싹 긁어모아 표준 압축
+          # 3. 진짜 올바른 위치에서 완벽한 빌드 실행
+          xcodebuild -project TwinBirthRoleplay.xcodeproj \
+                     -scheme TwinBirthRoleplay \
+                     -configuration Release \
+                     -sdk iphoneos \
+                     -allowProvisioningUpdates \
+                     CODE_SIGNING_ALLOWED=NO
+          
+          # 4. 생성된 내용물을 싹 긁어모아 3uTools/Diawi가 인식하는 표준 압축 진행
           mkdir -p build/ios/ipa/Payload
           APP_PATH=$(find /Users/builder/Library/Developer/Xcode/DerivedData -name "TwinBirthRoleplay.app" -type d | head -n 1)
           
@@ -34,4 +43,4 @@ workflows:
             exit 1
           fi
     artifacts:
-      - "**/build/ios/ipa/*.ipa"
+      - build/ios/ipa/*.ipa
