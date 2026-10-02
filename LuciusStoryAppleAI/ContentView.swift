@@ -3,7 +3,6 @@ import SwiftUI
 struct ContentView: View {
     @State private var store = ChatStore()
     @FocusState private var inputFocused: Bool
-    @Environment(\.openURL) private var openURL
 
     var body: some View {
         NavigationStack {
@@ -13,15 +12,15 @@ struct ContentView: View {
                         Label(status, systemImage: "info.circle.fill")
                             .font(.footnote)
                             .foregroundStyle(.yellow)
-                        if !store.modelIsAvailable || !store.turns.isEmpty {
+                        if let latestStory = store.turns.last(where: { $0.kind == .story }) {
                             Button {
-                                openWebSearch(store.latestSearchQuery)
+                                Task { await store.searchAndRegenerate(for: latestStory) }
                             } label: {
-                                Label("웹에서 설정 검색", systemImage: "magnifyingglass")
+                                Label("검색 근거로 AI 답변 다시 만들기", systemImage: "sparkles.magnifyingglass")
                                     .font(.subheadline.weight(.semibold))
                             }
                         }
-                        Text("검색을 누르면 검색어만 Google에 전달됩니다.")
+                        Text("검색을 누르면 최근 입력과 해당 답변 일부가 DuckDuckGo에 전송됩니다. 대화 전체는 보내지 않습니다.")
                             .font(.caption2)
                             .foregroundStyle(.secondary)
                     }
@@ -46,7 +45,7 @@ struct ContentView: View {
                             if store.isGenerating {
                                 HStack(spacing: 10) {
                                     ProgressView()
-                                    Text("기기 안에서 이야기를 쓰고 있어요…")
+                                    Text(store.status ?? "Apple Intelligence가 기기 안에서 이야기를 쓰고 있어요…")
                                         .font(.subheadline)
                                         .foregroundStyle(.secondary)
                                 }
@@ -148,13 +147,37 @@ struct ContentView: View {
                 }
 
                 Button {
-                    openWebSearch(store.searchQuery(for: turn))
+                    Task { await store.searchAndRegenerate(for: turn) }
                 } label: {
-                    Label("응답이 어긋났나요? 웹 검색", systemImage: "magnifyingglass")
+                    Label("응답이 어긋났나요? 검색해서 AI 답변 다시 받기", systemImage: "sparkles.magnifyingglass")
                         .font(.caption.weight(.medium))
                 }
                 .buttonStyle(.borderless)
                 .foregroundStyle(.secondary)
+
+                if !turn.sources.isEmpty {
+                    VStack(alignment: .leading, spacing: 6) {
+                        Label("답변에 사용한 검색 결과", systemImage: "link")
+                            .font(.caption.bold())
+                            .foregroundStyle(.secondary)
+                        ForEach(turn.sources) { source in
+                            if let url = URL(string: source.url) {
+                                Link(source.title, destination: url)
+                                    .font(.caption)
+                                    .lineLimit(2)
+                                if !source.snippet.isEmpty {
+                                    Text(source.snippet)
+                                        .font(.caption2)
+                                        .foregroundStyle(.secondary)
+                                        .lineLimit(3)
+                                }
+                            }
+                        }
+                    }
+                    .padding(12)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .background(.quaternary, in: RoundedRectangle(cornerRadius: 14))
+                }
             }
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding(.horizontal, 16)
@@ -244,9 +267,4 @@ struct ContentView: View {
         .background(.bar)
     }
 
-    private func openWebSearch(_ query: String) {
-        var components = URLComponents(string: "https://www.google.com/search")
-        components?.queryItems = [URLQueryItem(name: "q", value: query)]
-        if let url = components?.url { openURL(url) }
-    }
 }

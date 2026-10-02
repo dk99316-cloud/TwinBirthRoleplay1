@@ -14,7 +14,15 @@ struct StoryTurn: Identifiable, Codable, Equatable {
     var input: String = ""
     var narration: String = ""
     var lines: [StoryLine] = []
+    var sources: [SearchSource] = []
     var createdAt: Date = .now
+}
+
+struct SearchSource: Identifiable, Codable, Equatable {
+    var id: String { url }
+    var title: String
+    var url: String
+    var snippet: String
 }
 
 @Generable
