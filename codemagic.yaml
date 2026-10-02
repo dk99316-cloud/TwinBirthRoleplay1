@@ -9,8 +9,18 @@ workflows:
       - name: Build unsigned iPhone app
         script: |
           xcodebuild -project TwinBirthRoleplay.xcodeproj -scheme TwinBirthRoleplay -configuration Release -sdk iphoneos -allowProvisioningUpdates CODE_SIGNING_ALLOWED=NO
-          mkdir -p Payload
-          cp -r /Users/builder/Library/Developer/Xcode/DerivedData/*/Build/Products/Release-iphoneos/TwinBirthRoleplay.app Payload/
-          zip -r TwinBirthRoleplay.ipa Payload
+          
+          # 내용물 검사 및 강제 압축 구문
+          mkdir -p build/ios/ipa/Payload
+          APP_PATH=$(find /Users/builder/Library/Developer/Xcode/DerivedData -name "TwinBirthRoleplay.app" -type d | head -n 1)
+          
+          if [ -n "$APP_PATH" ] && [ -d "$APP_PATH" ]; then
+            cp -r "$APP_PATH" build/ios/ipa/Payload/
+            cd build/ios/ipa
+            zip -r TwinBirthRoleplay.ipa Payload
+          else
+            echo "Error: Actual TwinBirthRoleplay.app folder not found anywhere!"
+            exit 1
+          fi
     artifacts:
-      - "*.ipa"
+      - build/ios/ipa/*.ipa
