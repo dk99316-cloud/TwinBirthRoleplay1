@@ -1,6 +1,5 @@
 import Foundation
 import FoundationModels
-import SwiftUI
 import Observation
 
 @MainActor
@@ -27,12 +26,13 @@ final class ChatStore {
 
     func startStory() async {
         guard messages.isEmpty else { return }
-        await generate(prompt: "[첫 장면을 시작해 주세요.]", includeAsUserMessage: false)
+        await generate(prompt: "이야기를 시작해 주세요.", includeAsUserMessage: false)
     }
 
     func send() async {
         let text = draft.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !text.isEmpty, !isGenerating else { return }
+
         draft = ""
         messages.append(ChatMessage(role: .user, text: text))
         save()
@@ -50,20 +50,34 @@ final class ChatStore {
             status = "이 iPhone에서 기기 내 언어 모델을 사용할 수 없어요. Apple Intelligence 지원 기기에서 모델 준비가 끝난 뒤 이용해 주세요."
             return
         }
+
         isGenerating = true
         status = nil
         defer { isGenerating = false }
 
         do {
             let session = LanguageModelSession(instructions: RoleplayPrompt.load())
-            let history = messages.suffix(18).map { message in
+            let history = messages.suffix(4).map { message in
                 let speaker = message.role == .user ? "루시우스(사용자)" : "진행자"
-                return "\(speaker): \(message.text)"
+                let shortenedText = String(message.text.suffix(300))
+                return "\(speaker): \(shortenedText)"
             }.joined(separator: "\n")
-            let request = includeAsUserMessage
-                ? "지금까지의 대화:\n\(history)\n\n위 대화에 이어서 다른 인물과 세계의 반응을 이어 써 주세요. 루시우스의 다음 행동은 정하지 마세요."
-                : "이야기를 시작해 주세요."
-            let response = try await session.respond(to: request)
+
+            let request: String
+            if includeAsUserMessage {
+                request = """
+                지금까지의 대화:
+                \(history)
+
+                이어서 다른 인물과 세계의 반응만 짧게 써 주세요.
+                루시우스의 다음 행동이나 대사, 생각은 대신 정하지 마세요.
+                """
+            } else {
+                request = "쌍둥이 탄생 직후의 장면을 짧게 시작해 주세요. 루시우스의 행동은 정하지 마세요."
+            }
+
+            let options = GenerationOptions(maximumResponseTokens: 350)
+            let response = try await session.respond(to: request, options: options)
             messages.append(ChatMessage(role: .assistant, text: response.content))
             save()
         } catch {
@@ -76,6 +90,3 @@ final class ChatStore {
         UserDefaults.standard.set(data, forKey: storageKey)
     }
 }
-
-
-
